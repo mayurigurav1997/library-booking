@@ -8,6 +8,7 @@ const Login = () => {
 
     const [name, setName] = useState('');
     const [error, setError] = useState('');
+    const [users, setUsers] = useState([{ name: "Mayuri" }])
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -19,6 +20,7 @@ const Login = () => {
             setError('Please enter your name.');
             return;
         }
+
         setName('');
         console.log(name)
         router.push("/Tables")
