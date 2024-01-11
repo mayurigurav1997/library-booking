@@ -4,14 +4,14 @@ import classes from "../../styles/Login/Login.module.scss";
 import { Box, Button, OutlinedInput, TextField, Typography } from '@mui/material';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux'
-import { setSubmit } from '../feature/user/userSlice';
+import { setSubmit, setUser } from '../feature/user/userSlice';
 
 const Login = () => {
     const router = useRouter();
     const dispatch = useDispatch()
     const userData = useSelector((state) => state.user.allUsers)
     const [allUsers, setAllUsers] = useState(userData)
-    console.log(userData, "userData")
+    // console.log(userData, "userData")
     const [name, setName] = useState('');
     const [error, setError] = useState('');
 
@@ -26,18 +26,26 @@ const Login = () => {
             return;
         }
         // console.log(allUsers)
+        dispatch(setUser(name))
         for (user of userData) {
-            console.log(user, "user")
-            if (user.name == name) {
-                console.log("Inside the loop")
-                alert("User Already exists!");
-                break;
-            }
-            setAllUsers([...allUsers, { name: name }])
+            // console.log(user, "user")
+            // if (user.name == name) {
+            //     // console.log("Inside the loop")
+            //     alert("User Already exists!");
+            //     break;
+            // }
+            // setAllUsers([...allUsers, { name: name }])
             // alert("New User Created")
+
+            if (!userData.some((obj) => obj.name == name)) {
+                setAllUsers([...allUsers, { name: name }])
+            } else {
+                alert("User Already exists!");
+            }
         }
+
         setName('');
-        console.log(name)
+        // console.log(name)
         router.push("/Tables")
     }
     useEffect(() => {
