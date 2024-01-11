@@ -28,15 +28,6 @@ const Login = () => {
         // console.log(allUsers)
         dispatch(setUser(name))
         for (user of userData) {
-            // console.log(user, "user")
-            // if (user.name == name) {
-            //     // console.log("Inside the loop")
-            //     alert("User Already exists!");
-            //     break;
-            // }
-            // setAllUsers([...allUsers, { name: name }])
-            // alert("New User Created")
-
             if (!userData.some((obj) => obj.name == name)) {
                 setAllUsers([...allUsers, { name: name }])
             } else {
