@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const authState = {
-    allUsers: {}
+    allUsers: [{ name: "Mayuri" }, { name: "shriya" }]
 };
 
 export const userSlice = createSlice({
-    name: "users",
+    name: "user",
     initialState: authState,
     reducers: {
         setSubmit: (state, { payload }) => ({

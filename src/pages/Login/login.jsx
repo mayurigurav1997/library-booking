@@ -1,14 +1,19 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
+import React from "react"
 import classes from "../../styles/Login/Login.module.scss";
 import { Box, Button, OutlinedInput, TextField, Typography } from '@mui/material';
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from 'react-redux'
+import { setSubmit } from '../feature/user/userSlice';
 
 const Login = () => {
     const router = useRouter();
-
+    const dispatch = useDispatch()
+    const userData = useSelector((state) => state.user.allUsers)
+    const [allUsers, setAllUsers] = useState(userData)
+    console.log(userData, "userData")
     const [name, setName] = useState('');
     const [error, setError] = useState('');
-    const [users, setUsers] = useState([{ name: "Mayuri" }])
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -20,11 +25,24 @@ const Login = () => {
             setError('Please enter your name.');
             return;
         }
-
+        // console.log(allUsers)
+        for (user of userData) {
+            console.log(user, "user")
+            if (user.name == name) {
+                console.log("Inside the loop")
+                alert("User Already exists!");
+                break;
+            }
+            setAllUsers([...allUsers, { name: name }])
+            // alert("New User Created")
+        }
         setName('');
         console.log(name)
         router.push("/Tables")
     }
+    useEffect(() => {
+        dispatch(setSubmit(allUsers))
+    }, [allUsers])
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="1px solid red">
             <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }} border="0px solid blue">
@@ -36,7 +54,7 @@ const Login = () => {
                         value={name}
                         onChange={handleNameChange}
                         error={Boolean(error)}
-                        helperText={error}
+                        helpertext={error}
                         placeholder="Enter your name"
                         sx={{ width: "100%" }}
                     />

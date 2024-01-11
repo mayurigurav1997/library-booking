@@ -16,9 +16,3 @@ export default configureStore({
             immutableCheck: true
         })
 })
-
-// export const store = configureStore({
-//     reducer: {
-//         users: userReducer,
-//     }
-// })
