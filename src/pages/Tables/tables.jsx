@@ -5,7 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedDate, setSubmit } from '../feature/user/userSlice';
+import { setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
 // import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
 
 const Tables = () => {
@@ -23,17 +23,18 @@ const Tables = () => {
         console.log(formattedDate, "formattedDate")
         dispatch(setSelectedDate(formattedDate))
 
-        let foundObject = userData.find(obj => obj.name == userName)
-        const userDates = Object.keys(foundObject.dates)
-        if (!userDates.some(obj => obj == formattedDate)) {
-            console.log(foundObject.dates, "foundObject.dates")
+        let userObject = userData.find(obj => obj.name == userName)
+        // const userDates = Object.keys(foundObject.dates)
+        console.log(userObject, "userObject")
+        if (!userObject.bookingStatus.some(obj => obj?.date == formattedDate)) {
+            console.log("Need to add the date")
             const updatedData = userData.map(user =>
                 user.name === userName
-                    ? { ...user, dates: { ...user.dates, [formattedDate]: [] } }
+                    ? { ...user, bookingStatus: [...user.bookingStatus, { date: formattedDate, slot: "" }] }
                     : user)
             console.log(updatedData, "updatedData")
             dispatch(setSubmit(updatedData))
-            console.log(`Added date ${formattedDate}`);
+            // console.log(`Added date ${formattedDate}`);
         } else {
             console.log(`Date  already exists.`);
         }
@@ -41,13 +42,13 @@ const Tables = () => {
     }
     const slotsTimings = ["4:00AM - 6:00AM", "6:00AM - 8:00AM", "8:00AM - 10:00AM", "10:00AM - 12:00AM", "12:00AM - 2:00PM", "2:00PM - 4:00PM", "4:00PM - 6:00PM", "6:00PM - 8:00PM", "8:00PM - 10:00PM"];
     const [index, setIndex] = useState(0)
-    const [slot, setSlot] = useState(slotsTimings[index])
     const handleSlotBack = () => {
         setIndex(index => index - 1)
-        // setSlot(slotsTimings[index])
+        dispatch(setSlot(slotsTimings[index]))
     }
     const handleSlotNext = () => {
         setIndex(index + 1)
+        dispatch(setSlot(slotsTimings[index]))
 
     }
     useEffect(() => {

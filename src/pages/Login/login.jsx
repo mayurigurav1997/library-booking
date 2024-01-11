@@ -29,7 +29,7 @@ const Login = () => {
         dispatch(setUser(name))
         for (user of userData) {
             if (!userData.some((obj) => obj.name == name)) {
-                setAllUsers([...allUsers, { name: name }])
+                setAllUsers([...allUsers, { name: name, bookingStatus: [] }])
             } else {
                 alert("User Already exists!");
             }

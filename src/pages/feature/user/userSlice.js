@@ -1,9 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const authState = {
-    allUsers: [{ name: "Mayuri", dates: { "1/12/2024": [], "1/19/2024": [] } }, { name: "shriya", dates: { "2/19/2024": [] } }],
+    allUsers: [{
+        name: "Mayuri",
+        bookingStatus: [
+            {
+                seatId: 1,
+                slot: "4:00AM - 6:00AM",
+                date: "1/15/2024",
+            },
+            {
+                seatId: 2,
+                slot: "4:00AM - 6:00AM",
+                date: "1/15/2024",
+            },
+        ],
+    },],
     user: "",
-    selectedDate: ""
+    selectedDate: "",
+    selectedSlot: "",
 };
 
 export const userSlice = createSlice({
@@ -22,10 +37,31 @@ export const userSlice = createSlice({
             ...state,
             selectedDate: payload,
         }),
+        setSlot: (state, { payload }) => ({
+            ...state,
+            selectedSlot: payload,
+        }),
     },
 });
 
 
-export const { setSubmit, setUser, setSelectedDate } = userSlice.actions;
+export const { setSubmit, setUser, setSelectedDate, setSlot } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
+// const user = [
+//     {
+//       name: "XYZ",
+//   bookingStatus: [
+//     {
+//       seatId: 1,
+//       slot: "8-10",
+//       date: "11-1-2024",
+//     },
+//     {
+//       seatId: 2,
+//       slot: "8-10",
+//       date: "11-1-2024",
+//     },
+//   ],
+//     },
+//   ];
