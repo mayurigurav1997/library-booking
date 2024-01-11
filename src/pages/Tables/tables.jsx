@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedDate, setSubmit } from '../feature/user/userSlice';
+// import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
 
 const Tables = () => {
     const [date, setDate] = useState("")
@@ -38,6 +39,17 @@ const Tables = () => {
         }
 
     }
+    const slotsTimings = ["4:00AM - 6:00AM", "6:00AM - 8:00AM", "8:00AM - 10:00AM", "10:00AM - 12:00AM", "12:00AM - 2:00PM", "2:00PM - 4:00PM", "4:00PM - 6:00PM", "6:00PM - 8:00PM", "8:00PM - 10:00PM"];
+    const [index, setIndex] = useState(0)
+    const [slot, setSlot] = useState(slotsTimings[index])
+    const handleSlotBack = () => {
+        setIndex(index => index - 1)
+        // setSlot(slotsTimings[index])
+    }
+    const handleSlotNext = () => {
+        setIndex(index + 1)
+
+    }
     useEffect(() => {
         // console.log(date, "date")
 
@@ -54,6 +66,19 @@ const Tables = () => {
                             value={date}
                             onChange={(date) => handleDate(date)} />
                     </LocalizationProvider>
+                </Box>
+
+                <Typography variant="h6" sx={{ ml: 16 }}>Select time slot</Typography>
+                <Box sx={{ mb: 5, display: "flex", justifyContent: "space-between" }} border="1px solid red">
+                    <Button variant="outlined" onClick={handleSlotBack} disabled={slotsTimings[index] == "4:00AM - 6:00AM"}>
+                        Previous
+                    </Button>
+                    <Typography variant="h6" >{slotsTimings[index]}</Typography>
+                    <Button variant="outlined" onClick={handleSlotNext} disabled={slotsTimings[index] == "8:00PM - 10:00PM"}>Next</Button>
+                </Box>
+
+                <Box sx={{ p: 1 }} border="1px solid red">
+                    {<Box sx={{ width: "18px", height: "18px", display: "flex", justifyContent: "center", alignItems: "center" }} border="1px solid blue">3</Box>}
                 </Box>
             </Box>
         </Box>
