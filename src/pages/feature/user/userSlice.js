@@ -39,20 +39,3 @@ export const userSlice = createSlice({
 export const { setSubmit, setUser, setSelectedDate, setSlot, setPaymentData } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
-// const user = [
-//     {
-//       name: "XYZ",
-//   bookingStatus: [
-//     {
-//       seatId: 1,
-//       slot: "8-10",
-//       date: "11-1-2024",
-//     },
-//     {
-//       seatId: 2,
-//       slot: "8-10",
-//       date: "11-1-2024",
-//     },
-//   ],
-//     },
-//   ];
