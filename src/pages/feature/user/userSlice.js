@@ -43,6 +43,7 @@ const authState = {
     user: "",
     selectedDate: "",
     selectedSlot: "4:00AM - 6:00AM",
+    paymentData: []
 };
 
 export const userSlice = createSlice({
@@ -65,11 +66,15 @@ export const userSlice = createSlice({
             ...state,
             selectedSlot: payload,
         }),
+        setPaymentData: (state, { payload }) => ({
+            ...state,
+            paymentData: payload,
+        })
     },
 });
 
 
-export const { setSubmit, setUser, setSelectedDate, setSlot } = userSlice.actions;
+export const { setSubmit, setUser, setSelectedDate, setSlot, setPaymentData } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
 // const user = [

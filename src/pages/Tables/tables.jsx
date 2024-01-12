@@ -5,7 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
+import { setPaymentData, setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 // import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
@@ -87,9 +87,10 @@ const Tables = () => {
                 .map(booking => booking?.seatId)
         );
         setBookedSeats(filterBookedSeats)
-        console.log(slotsTimings[index + 1], "selectedSlot")
-        console.log(selectedDate, "selectedDate")
-        console.log(filterBookedSeats, "Booked seats are:")
+        // console.log(slotsTimings[index + 1], "selectedSlot")
+        // console.log(selectedDate, "selectedDate")
+        // console.log(filterBookedSeats, "Booked seats are:")
+
     }
 
     function handleSeatSelecting(i) {
@@ -137,7 +138,17 @@ const Tables = () => {
 
     }
     const handleNext = () => {
+        let paymentData = userData?.filter(user => user.name === userName).flatMap(user =>
+            user?.bookingStatus
+                .filter(booking => booking.slot && booking.date && booking.seatId)
+                .map(booking => booking)
+        );
+
+        console.log(paymentData, "paymentData")
+        // console.log(formattedData, "formattedData09")
+        dispatch(setPaymentData(paymentData))
         router.push("/Pay")
+
     }
     useEffect(() => {
         console.log(bookedSeats, "indise useeeffect")
@@ -207,9 +218,9 @@ const Tables = () => {
 
             <Box sx={{ display: "flex", justifyContent: "space-between", width: "40%" }}>
                 <Button variant="outlined" onClick={handleBook} disabled={!selectedButtonId}>Book</Button>
-                <Link href="/Pay">
-                    <Button variant="outlined" >Next</Button>
-                </Link>
+                {/* <Link href="/Pay"> */}
+                <Button variant="outlined" onClick={handleNext}>Next</Button>
+                {/* </Link> */}
             </Box>
         </Box>
     )

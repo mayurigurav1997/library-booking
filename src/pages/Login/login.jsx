@@ -5,6 +5,7 @@ import { Box, Button, CircularProgress, OutlinedInput, Snackbar, TextField, Typo
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux'
 import { setSubmit, setUser } from '../feature/user/userSlice';
+import { styled } from '@mui/system';
 
 const Login = () => {
     const router = useRouter();
@@ -15,10 +16,17 @@ const Login = () => {
     const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-
+    const CustomButton = styled(Button)({
+        color: 'white',
+        backgroundColor: '#5b5bd3'
+    });
+    const Typography4 = styled(Typography)`
+    font-size: 24px;
+    font-weight: bold; 
+    color:"#202124ed"
+  `;
     const handleNameChange = (event) => {
         setName(event.target.value);
-        // Clear error when user starts typing
         setError('');
     };
     const handleLogin = () => {
@@ -51,7 +59,7 @@ const Login = () => {
                 <CircularProgress />
             </Box> : <></>}
             <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }} border="0px solid blue">
-                <Typography variant="h5" sx={{ textAlign: "center", mb: 4 }}>Focus Reading Room</Typography>
+                <Typography4 variant="h4" sx={{ textAlign: "center", mb: 4 }}>Focus Reading Room</Typography4>
                 <Typography variant="h6" sx={{ textAlign: "left" }}>Name</Typography>
 
                 <Box sx={{ mb: 5 }}>
@@ -65,9 +73,11 @@ const Login = () => {
                     />
                     {error && <Typography variant="h6" color="red">Please Enter the Name</Typography>}
                 </Box>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Button variant="contained" sx={{ width: "20%" }}
-                        onClick={handleLogin}>Login</Button>
+                <Box sx={{ display: "flex", justifyContent: "center", }}>
+                    <CustomButton variant="contained" sx={{ width: "20%", textTransform: "capitalize" }}
+                        onClick={handleLogin} >
+                        Login
+                    </CustomButton>
                 </Box>
             </Box>
         </Box>
