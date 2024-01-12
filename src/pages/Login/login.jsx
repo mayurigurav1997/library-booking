@@ -19,7 +19,7 @@ const Login = () => {
     const CustomButton = styled(Button)({
         color: 'white',
         backgroundColor: '#5b5bd3',
-        fontSize: "20px"
+        fontSize: "16px"
     });
     const Typography3 = styled(Typography)({
         fontSize: "24px",
@@ -28,9 +28,9 @@ const Login = () => {
     });
     const Typography4 = styled(Typography)({
         fontSize: "20px",
-        fontWeight: "bold",
+        fontWeight: 600,
         color: "#202124e6",
-    });;
+    });
     const handleNameChange = (event) => {
         setName(event.target.value);
         setError('');

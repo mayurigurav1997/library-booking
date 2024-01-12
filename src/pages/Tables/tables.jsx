@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import classes from "../../styles/Login/Login.module.scss";
 import { Box, Button, OutlinedInput, TextField, Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -9,21 +8,35 @@ import { setPaymentData, setSelectedDate, setSlot, setSubmit } from '../feature/
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from '@emotion/styled';
-// import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
+import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
 
 const Tables = () => {
     const router = useRouter();
     const [date, setDate] = useState("")
     const [bookedSeats, setBookedSeats] = useState([])
     const [selectedButtonId, setSelectedButtonId] = useState(null)
+    const Row1 = ["1(Row1)", "2(Row1)", "3(Row1)", "4(Row1)", "5(Row1)", "6(Row1)"]
+    const Row2 = ["1(Row2)", "2(Row2)", "3(Row2)", "4(Row2)", "5(Row2)", "6(Row2)"]
+    const Row3 = ["1(Row3)", "2(Row3)", "3(Row3)", "4(Row3)", "5(Row3)", "6(Row3)"]
     const dispatch = useDispatch()
     const userName = useSelector((state) => state.user.user)
     const selectedDate = useSelector((state) => state.user.selectedDate)
     const selectedSlot = useSelector((state) => state.user.selectedSlot)
     let userData = useSelector((state) => state.user.allUsers)
+    const CustomButton = styled(Button)({
+        color: 'white',
+        backgroundColor: '#5b5bd3',
+        fontSize: "16px",
+        textTransform: "capitalize"
+    });
     const Typography3 = styled(Typography)({
         fontSize: "24px",
         fontWeight: "bold",
+        color: "#202124e6",
+    });
+    const Typography4 = styled(Typography)({
+        fontSize: "20px",
+        fontWeight: 600,
         color: "#202124e6",
     });
     const handleDate = (date) => {
@@ -41,15 +54,6 @@ const Tables = () => {
         // const userDates = Object.keys(foundObject.dates)
         console.log(userObject, "userObject")
         if (!userObject.bookingStatus.some(obj => obj?.date == formattedDate)) {
-            // console.log("Need to add the date")
-            // const updatedData = userData.map(user =>
-            //     user.name === userName
-            //         ? { ...user, bookingStatus: [...user.bookingStatus, { date: formattedDate, slot: "" }] }
-            //         : user)
-            // console.log(updatedData, "updatedData")
-            // dispatch(setSubmit(updatedData))
-
-            // console.log(`Added date ${formattedDate}`);
         } else {
             console.log(`Date  already exists.`);
             var filterBookedSeats = userData?.flatMap(user =>
@@ -91,10 +95,6 @@ const Tables = () => {
                 .map(booking => booking?.seatId)
         );
         setBookedSeats(filterBookedSeats)
-        // console.log(slotsTimings[index + 1], "selectedSlot")
-        // console.log(selectedDate, "selectedDate")
-        // console.log(filterBookedSeats, "Booked seats are:")
-
     }
 
     function handleSeatSelecting(i) {
@@ -151,6 +151,8 @@ const Tables = () => {
         console.log(paymentData, "paymentData")
         // console.log(formattedData, "formattedData09")
         dispatch(setPaymentData(paymentData))
+        dispatch(setSelectedDate(""))
+        dispatch(setSlot("4:00AM - 6:00AM"))
         router.push("/Pay")
 
     }
@@ -160,10 +162,10 @@ const Tables = () => {
 
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "98vh" }} border="1px solid red">
-            <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }} border="1px solid blue">
-                <Typography3 variant="h5" sx={{ textAlign: "center", mb: 3 }}>Select your tables</Typography3>
-                <Typography variant="h6" sx={{ textAlign: "left", ml: 16 }}>Select date</Typography>
-                <Box sx={{ mb: 5, ml: 16 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", width: "30%", justifyContent: "center", alignItems: "center" }} border="0px solid blue">
+                <Typography3 variant="h5" sx={{ mb: 3 }}>Select your tables</Typography3>
+                <Typography4 variant="h6" sx={{}}>Select date</Typography4>
+                <Box sx={{ mb: 3, }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             value={date}
@@ -171,59 +173,59 @@ const Tables = () => {
                     </LocalizationProvider>
                 </Box>
 
-                <Typography variant="h6" sx={{ ml: 16 }}>Select time slot</Typography>
-                <Box sx={{ mb: 5, display: "flex", justifyContent: "space-between" }} border="1px solid red">
+                <Typography4 variant="h6" sx={{}}>Select time slot</Typography4>
+                <Box sx={{ mb: 4, display: "flex", justifyContent: "space-between", width: "86%" }} border="0px solid red">
                     <Button variant="outlined" onClick={handleSlotBack} disabled={(selectedDate ? false : true) || slotsTimings[index] == "4:00AM - 6:00AM"}>
                         Previous
                     </Button>
                     <Typography variant="h6" >{slotsTimings[index]}</Typography>
                     <Button variant="outlined" onClick={handleSlotNext} disabled={(selectedDate ? false : true) || slotsTimings[index] == "8:00PM - 10:00PM"}>Next</Button>
                 </Box>
-
-
-
             </Box>
-            {selectedDate && selectedSlot ?
-                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }} border="1px solid red">
+
+            <Typography4 variant="h6" sx={{ mb: 2 }}>Select tables</Typography4>
+            {selectedSlot ?
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }} border="0px solid red">
                     <Typography variant="h6" >Row1</Typography>
-                    {["1(Row1)", "2(Row1)", "3(Row1)", "4(Row1)", "5(Row1)", "6(Row1)"].map((i) => <Button
+                    {Row1.map((i) => <Button
                         variant={selectedButtonId == i ? "contained" : "outlined"}
-                        key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
+                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }} onClick={() => {
                             console.log(i, 'clicked');
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
-                        border="1px solid blue">{i.charAt()}</Button>)}
+                        border="0px solid blue">{i.charAt()}</Button>)}
                 </Box> :
                 <></>}
-            {selectedDate && selectedSlot ?
-                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }} border="1px solid red">
+            {selectedSlot ?
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }} border="0px solid red">
                     <Typography variant="h6" >Row2</Typography>
-                    {["1(Row2)", "2(Row2)", "3(Row2)", "4(Row2)", "5(Row2)", "6(Row2)"].map((i) => <Button
+                    {Row2.map((i) => <Button
                         variant={selectedButtonId == i ? "contained" : "outlined"}
-                        key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
+                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }} onClick={() => {
                             console.log(i, 'clicked');
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
-                        border="1px solid blue">{i.charAt()}</Button>)}
+                        border="0px solid blue">{i.charAt()}</Button>)}
                 </Box> :
                 <></>}
-            {selectedDate && selectedSlot ?
-                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }} border="1px solid red">
+            {selectedSlot ?
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }} border="0px solid red">
                     <Typography variant="h6" >Row3</Typography>
-                    {["1(Row3)", "2(Row3)", "3(Row3)", "4(Row3)", "5(Row3)", "6(Row3)"].map((i) => <Button
+                    {Row3.map((i) => <Button
                         variant={selectedButtonId == i ? "contained" : "outlined"}
-                        key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
+                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }}
+                        onClick={() => {
                             console.log(i, 'clicked');
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
-                        border="1px solid blue">{i.charAt()}</Button>)}
+                        border="0px solid blue">{i.charAt()}</Button>)}
                 </Box> :
                 <></>}
 
             <Box sx={{ display: "flex", justifyContent: "space-between", width: "40%" }}>
-                <Button variant="outlined" onClick={handleBook} disabled={!selectedButtonId}>Book</Button>
+                <Button variant="outlined" onClick={handleBook} disabled={!(selectedButtonId && selectedDate)} className={{ textTransform: "capitalize", }}>Book</Button>
                 {/* <Link href="/Pay"> */}
-                <Button variant="outlined" onClick={handleNext}>Next</Button>
+                <CustomButton variant="contained" onClick={handleNext}>Next</CustomButton>
                 {/* </Link> */}
             </Box>
         </Box>
