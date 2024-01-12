@@ -1,45 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const authState = {
-    allUsers: [{
-        name: "Mayuri",
-        bookingStatus: [
-            {
-                seatId: "1(Row1)",
-                slot: "6:00AM - 8:00AM",
-                date: "1/15/2024",
-            },
-            {
-                seatId: "2(Row1)",
-                slot: "12:00AM - 2:00PM",
-                date: "1/15/2024",
-            },
-            {
-                seatId: "6(Row1)",
-                slot: "8:00AM - 10:00AM",
-                date: "1/15/2024",
-            },
-        ],
-    }, {
-        name: "Shreya",
-        bookingStatus: [
-            {
-                seatId: "2(Row1)",
-                slot: "4:00AM - 6:00AM",
-                date: "1/15/2024",
-            },
-            {
-                seatId: "3(Row1)",
-                slot: "6:00AM - 8:00AM",
-                date: "1/16/2024",
-            },
-            {
-                seatId: "",
-                slot: "",
-                date: "1/15/2024",
-            },
-        ],
-    },],
+    allUsers: [],
     user: "",
     selectedDate: "",
     selectedSlot: "4:00AM - 6:00AM",

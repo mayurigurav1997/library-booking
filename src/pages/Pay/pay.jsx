@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import React from "react"
-import classes from "../../styles/Login/Login.module.scss";
 import { Box, Button, OutlinedInput, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,7 +12,6 @@ const Pay = () => {
     const dispatch = useDispatch()
     const paymentData = useSelector((state) => state.user.paymentData)
     const Price = paymentData.length * 50 || 0;
-    console.log(paymentData, "Inside the payment paymentData")
     const CustomButton = styled(Button)({
         color: 'white',
         backgroundColor: '#5b5bd3',

@@ -11,7 +11,6 @@ const Login = () => {
     const dispatch = useDispatch()
     const userData = useSelector((state) => state.user.allUsers)
     const [allUsers, setAllUsers] = useState(userData)
-    // console.log(userData, "userData")
     const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -39,7 +38,6 @@ const Login = () => {
             setError('Please enter your name.');
             return;
         }
-        // console.log(allUsers)
         dispatch(setUser(name))
         for (user of userData) {
             if (!userData.some((obj) => obj.name == name)) {

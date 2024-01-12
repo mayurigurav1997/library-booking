@@ -8,7 +8,7 @@ import { setPaymentData, setSelectedDate, setSlot, setSubmit } from '../feature/
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from '@emotion/styled';
-import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
+// import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
 
 const Tables = () => {
     const router = useRouter();
@@ -47,24 +47,17 @@ const Tables = () => {
         let day = date["$D"]
         let year = date["$y"]
         let formattedDate = `${month}/${day}/${year}`
-        console.log(formattedDate, "formattedDate")
         dispatch(setSelectedDate(formattedDate))
 
         let userObject = userData.find(obj => obj.name == userName)
-        // const userDates = Object.keys(foundObject.dates)
-        console.log(userObject, "userObject")
         if (!userObject.bookingStatus.some(obj => obj?.date == formattedDate)) {
         } else {
-            console.log(`Date  already exists.`);
             var filterBookedSeats = userData?.flatMap(user =>
                 user?.bookingStatus
                     .filter(booking => booking.slot == "4:00AM - 6:00AM" && booking.date == formattedDate && booking.seatId)
                     .map(booking => booking?.seatId)
             );
             setBookedSeats(filterBookedSeats)
-            console.log(slotsTimings[index + 1], "selectedSlot")
-            console.log(formattedDate, "selectedDate")
-            console.log(filterBookedSeats, "Booked seats are:")
         }
 
     }
@@ -80,9 +73,6 @@ const Tables = () => {
                 .map(booking => booking?.seatId)
         );
         setBookedSeats(filterBookedSeats)
-        console.log(slotsTimings[index - 1], "selectedSlot")
-        console.log(selectedDate, "selectedDate")
-        console.log(filterBookedSeats, "Booked seats are:")
 
     }
     const handleSlotNext = () => {
@@ -98,7 +88,6 @@ const Tables = () => {
     }
 
     function handleSeatSelecting(i) {
-        console.log(i, "iyt")
         let totalBooking = userData?.filter(user => user.name === userName).flatMap(user =>
             user?.bookingStatus
                 .filter(booking => booking.slot && booking.date == selectedDate && booking.seatId)
@@ -109,7 +98,6 @@ const Tables = () => {
                 .filter(booking => booking.slot == selectedSlot && booking.date == selectedDate && booking.seatId)
                 .map(booking => booking?.seatId)
         );
-        console.log(slotBooking, "slotBooking")
         if (totalBooking.length >= 3) {
             alert("You have already selected 3 slots for this day, Can't select slot for this day now")
             setSelectedButtonId(null)
@@ -121,12 +109,10 @@ const Tables = () => {
         }
     }
     const handleBook = () => {
-        console.log(selectedButtonId, "setSelectedButtonId(i)")
         const updatedData = userData.map(user =>
             user.name === userName
                 ? { ...user, bookingStatus: [...user.bookingStatus, { seatId: selectedButtonId, slot: selectedSlot, date: selectedDate }] }
                 : user)
-        console.log(updatedData, "updatedData")
         dispatch(setSubmit(updatedData))
         alert("Your seat is booked")
         setSelectedButtonId(null)
@@ -148,8 +134,6 @@ const Tables = () => {
                 .map(booking => booking)
         );
 
-        console.log(paymentData, "paymentData")
-        // console.log(formattedData, "formattedData09")
         dispatch(setPaymentData(paymentData))
         dispatch(setSelectedDate(""))
         dispatch(setSlot("4:00AM - 6:00AM"))
@@ -158,8 +142,6 @@ const Tables = () => {
     }
     useEffect(() => {
         const allUsers = localStorage.getItem("allUsers");
-        console.log(allUsers, "allUsers");
-        console.log(bookedSeats, "indise useeeffect")
     }, [bookedSeats])
 
     return (
@@ -192,7 +174,6 @@ const Tables = () => {
                     {Row1.map((i) => <Button
                         variant={selectedButtonId == i ? "contained" : "outlined"}
                         key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }} onClick={() => {
-                            console.log(i, 'clicked');
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
                         border="0px solid blue">{i.charAt()}</Button>)}
@@ -204,7 +185,6 @@ const Tables = () => {
                     {Row2.map((i) => <Button
                         variant={selectedButtonId == i ? "contained" : "outlined"}
                         key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }} onClick={() => {
-                            console.log(i, 'clicked');
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
                         border="0px solid blue">{i.charAt()}</Button>)}
@@ -217,7 +197,6 @@ const Tables = () => {
                         variant={selectedButtonId == i ? "contained" : "outlined"}
                         key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }}
                         onClick={() => {
-                            console.log(i, 'clicked');
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
                         border="0px solid blue">{i.charAt()}</Button>)}
