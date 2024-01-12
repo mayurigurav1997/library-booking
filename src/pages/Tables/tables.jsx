@@ -20,6 +20,7 @@ const Tables = () => {
     let userData = useSelector((state) => state.user.allUsers)
     // console.log(name, "name the user")
     const handleDate = (date) => {
+        setSelectedButtonId(null)
         setDate(date)
         let month = date["$M"] + 1
         let day = date["$D"]
@@ -32,13 +33,13 @@ const Tables = () => {
         // const userDates = Object.keys(foundObject.dates)
         console.log(userObject, "userObject")
         if (!userObject.bookingStatus.some(obj => obj?.date == formattedDate)) {
-            console.log("Need to add the date")
-            const updatedData = userData.map(user =>
-                user.name === userName
-                    ? { ...user, bookingStatus: [...user.bookingStatus, { date: formattedDate, slot: "" }] }
-                    : user)
-            console.log(updatedData, "updatedData")
-            dispatch(setSubmit(updatedData))
+            // console.log("Need to add the date")
+            // const updatedData = userData.map(user =>
+            //     user.name === userName
+            //         ? { ...user, bookingStatus: [...user.bookingStatus, { date: formattedDate, slot: "" }] }
+            //         : user)
+            // console.log(updatedData, "updatedData")
+            // dispatch(setSubmit(updatedData))
 
             // console.log(`Added date ${formattedDate}`);
         } else {
@@ -58,6 +59,7 @@ const Tables = () => {
     const slotsTimings = ["4:00AM - 6:00AM", "6:00AM - 8:00AM", "8:00AM - 10:00AM", "10:00AM - 12:00AM", "12:00AM - 2:00PM", "2:00PM - 4:00PM", "4:00PM - 6:00PM", "6:00PM - 8:00PM", "8:00PM - 10:00PM"];
     const [index, setIndex] = useState(0)
     const handleSlotBack = () => {
+        setSelectedButtonId(null)
         setIndex(index => index - 1)
         dispatch(setSlot(slotsTimings[index - 1]))
         var filterBookedSeats = userData?.flatMap(user =>
@@ -72,6 +74,7 @@ const Tables = () => {
 
     }
     const handleSlotNext = () => {
+        setSelectedButtonId(null)
         setIndex(index + 1)
         dispatch(setSlot(slotsTimings[index + 1]))
         var filterBookedSeats = userData?.flatMap(user =>
@@ -95,10 +98,19 @@ const Tables = () => {
         console.log(totalBooking, "totalBooking")
         if (totalBooking.length >= 3) {
             alert("You have already selected 3 slots for this day, Cant select slot now")
+            setSelectedButtonId(null)
         } else {
             setSelectedButtonId(i)
         }
-
+    }
+    const handleNext = () => {
+        console.log(selectedButtonId, "setSelectedButtonId(i)")
+        const updatedData = userData.map(user =>
+            user.name === userName
+                ? { ...user, bookingStatus: [...user.bookingStatus, { date: selectedDate, slot: selectedSlot, seatId: selectedButtonId }] }
+                : user)
+        console.log(updatedData, "updatedData")
+        dispatch(setSubmit(updatedData))
 
     }
     useEffect(() => {
@@ -167,7 +179,7 @@ const Tables = () => {
                 </Box> :
                 <></>}
 
-            {/* <Button variant="outlined" onClick={handleNext}>Next</Button> */}
+            <Button variant="outlined" onClick={handleNext} disabled={!selectedButtonId}>Next</Button>
         </Box>
     )
 }
