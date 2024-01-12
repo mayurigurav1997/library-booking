@@ -39,21 +39,21 @@ const Login = () => {
             return;
         }
         dispatch(setUser(name))
-        for (user of userData) {
-            if (!userData.some((obj) => obj.name == name)) {
-                setAllUsers([...allUsers, { name: name, bookingStatus: [] }])
-                dispatch(setSubmit(allUsers))
-            } else {
-                alert("User Already exists!");
-            }
+
+        if (!userData.some((obj) => obj.name == name)) {
+            setAllUsers([...allUsers, { name: name, bookingStatus: [] }])
+            // dispatch(setSubmit(allUsers))
+        } else {
+            alert("User Already exists!");
         }
+
         setName('');
         router.push("/Tables")
     }
     useEffect(() => {
         dispatch(setSubmit(allUsers))
-        const stringifiedData = JSON.stringify(allUsers);
-        localStorage.setItem("allUsers", stringifiedData);
+        // const stringifiedData = JSON.stringify(allUsers);
+        // localStorage.setItem("allUsers", stringifiedData);
     }, [allUsers])
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="0px solid red">

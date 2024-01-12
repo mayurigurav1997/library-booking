@@ -50,7 +50,7 @@ const Tables = () => {
         dispatch(setSelectedDate(formattedDate))
 
         let userObject = userData.find(obj => obj.name == userName)
-        if (!userObject.bookingStatus.some(obj => obj?.date == formattedDate)) {
+        if (!userObject?.bookingStatus.some(obj => obj?.date == formattedDate)) {
         } else {
             var filterBookedSeats = userData?.flatMap(user =>
                 user?.bookingStatus
