@@ -10,8 +10,13 @@ import { setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
 
 const Tables = () => {
     const [date, setDate] = useState("")
+    const [bookedSeats, setBookedSeats] = useState([])
+    const [selectedButtonId, setSelectedButtonId] = useState(null)
     const dispatch = useDispatch()
     const userName = useSelector((state) => state.user.user)
+    const selectedDate = useSelector((state) => state.user.selectedDate)
+    const selectedSlot = useSelector((state) => state.user.selectedSlot)
+    // var bookedSeats = []
     let userData = useSelector((state) => state.user.allUsers)
     // console.log(name, "name the user")
     const handleDate = (date) => {
@@ -34,9 +39,19 @@ const Tables = () => {
                     : user)
             console.log(updatedData, "updatedData")
             dispatch(setSubmit(updatedData))
+
             // console.log(`Added date ${formattedDate}`);
         } else {
             console.log(`Date  already exists.`);
+            var filterBookedSeats = userData?.flatMap(user =>
+                user?.bookingStatus
+                    .filter(booking => "4:00AM - 6:00AM" && booking.date == formattedDate && booking.seatId)
+                    .map(booking => booking?.seatId)
+            );
+            setBookedSeats(filterBookedSeats)
+            console.log(slotsTimings[index + 1], "selectedSlot")
+            console.log(formattedDate, "selectedDate")
+            console.log(filterBookedSeats, "Booked seats are:")
         }
 
     }
@@ -44,20 +59,54 @@ const Tables = () => {
     const [index, setIndex] = useState(0)
     const handleSlotBack = () => {
         setIndex(index => index - 1)
-        dispatch(setSlot(slotsTimings[index]))
+        dispatch(setSlot(slotsTimings[index - 1]))
+        var filterBookedSeats = userData?.flatMap(user =>
+            user?.bookingStatus
+                .filter(booking => booking.slot == slotsTimings[index - 1] && booking.date == selectedDate && booking.seatId)
+                .map(booking => booking?.seatId)
+        );
+        setBookedSeats(filterBookedSeats)
+        console.log(slotsTimings[index - 1], "selectedSlot")
+        console.log(selectedDate, "selectedDate")
+        console.log(filterBookedSeats, "Booked seats are:")
+
     }
     const handleSlotNext = () => {
         setIndex(index + 1)
-        dispatch(setSlot(slotsTimings[index]))
+        dispatch(setSlot(slotsTimings[index + 1]))
+        var filterBookedSeats = userData?.flatMap(user =>
+            user?.bookingStatus
+                .filter(booking => booking.slot == slotsTimings[index + 1] && booking.date == selectedDate && booking.seatId)
+                .map(booking => booking?.seatId)
+        );
+        setBookedSeats(filterBookedSeats)
+        console.log(slotsTimings[index + 1], "selectedSlot")
+        console.log(selectedDate, "selectedDate")
+        console.log(filterBookedSeats, "Booked seats are:")
+    }
+
+    function handleBooking(i) {
+        console.log(i, "iyt")
+        let totalBooking = userData?.filter(user => user.name === userName).flatMap(user =>
+            user?.bookingStatus
+                .filter(booking => booking.slot && booking.date == selectedDate && booking.seatId)
+                .map(booking => booking?.seatId)
+        );
+        console.log(totalBooking, "totalBooking")
+        if (totalBooking.length >= 3) {
+            alert("You have already selected 3 slots for this day, Cant select slot now")
+        } else {
+            setSelectedButtonId(i)
+        }
+
 
     }
     useEffect(() => {
-        // console.log(date, "date")
-
-    }, [date])
+        console.log(bookedSeats, "indise useeeffect")
+    }, [bookedSeats])
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="1px solid red">
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "98vh" }} border="1px solid red">
             <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }} border="1px solid blue">
                 <Typography variant="h5" sx={{ textAlign: "center", mb: 3 }}>Select your tables</Typography>
                 <Typography variant="h6" sx={{ textAlign: "left", ml: 16 }}>Select date</Typography>
@@ -71,17 +120,54 @@ const Tables = () => {
 
                 <Typography variant="h6" sx={{ ml: 16 }}>Select time slot</Typography>
                 <Box sx={{ mb: 5, display: "flex", justifyContent: "space-between" }} border="1px solid red">
-                    <Button variant="outlined" onClick={handleSlotBack} disabled={slotsTimings[index] == "4:00AM - 6:00AM"}>
+                    <Button variant="outlined" onClick={handleSlotBack} disabled={(selectedDate ? false : true) || slotsTimings[index] == "4:00AM - 6:00AM"}>
                         Previous
                     </Button>
                     <Typography variant="h6" >{slotsTimings[index]}</Typography>
-                    <Button variant="outlined" onClick={handleSlotNext} disabled={slotsTimings[index] == "8:00PM - 10:00PM"}>Next</Button>
+                    <Button variant="outlined" onClick={handleSlotNext} disabled={(selectedDate ? false : true) || slotsTimings[index] == "8:00PM - 10:00PM"}>Next</Button>
                 </Box>
 
-                <Box sx={{ p: 1 }} border="1px solid red">
-                    {<Box sx={{ width: "18px", height: "18px", display: "flex", justifyContent: "center", alignItems: "center" }} border="1px solid blue">3</Box>}
-                </Box>
+
+
             </Box>
+            {selectedDate && selectedSlot ?
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }} border="1px solid red">
+                    <Typography variant="h6" >Row1</Typography>
+                    {["1(Row1)", "2(Row1)", "3(Row1)", "4(Row1)", "5(Row1)", "6(Row1)"].map((i) => <Button
+                        variant={selectedButtonId == i ? "contained" : "outlined"}
+                        key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
+                            console.log(i, 'clicked');
+                            handleBooking(i)
+                        }} disabled={bookedSeats.some(a => a == i)}
+                        border="1px solid blue">{i.charAt()}</Button>)}
+                </Box> :
+                <></>}
+            {selectedDate && selectedSlot ?
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }} border="1px solid red">
+                    <Typography variant="h6" >Row2</Typography>
+                    {["1(Row2)", "2(Row2)", "3(Row2)", "4(Row2)", "5(Row2)", "6(Row2)"].map((i) => <Button
+                        variant={selectedButtonId == i ? "contained" : "outlined"}
+                        key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
+                            console.log(i, 'clicked');
+                            handleBooking(i)
+                        }} disabled={bookedSeats.some(a => a == i)}
+                        border="1px solid blue">{i.charAt()}</Button>)}
+                </Box> :
+                <></>}
+            {selectedDate && selectedSlot ?
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }} border="1px solid red">
+                    <Typography variant="h6" >Row3</Typography>
+                    {["1(Row3)", "2(Row3)", "3(Row3)", "4(Row3)", "5(Row3)", "6(Row3)"].map((i) => <Button
+                        variant={selectedButtonId == i ? "contained" : "outlined"}
+                        key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
+                            console.log(i, 'clicked');
+                            handleBooking(i)
+                        }} disabled={bookedSeats.some(a => a == i)}
+                        border="1px solid blue">{i.charAt()}</Button>)}
+                </Box> :
+                <></>}
+
+            {/* <Button variant="outlined" onClick={handleNext}>Next</Button> */}
         </Box>
     )
 }
