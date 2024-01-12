@@ -204,7 +204,7 @@ const Tables = () => {
                 <></>}
 
             <Box sx={{ display: "flex", justifyContent: "space-between", width: "40%" }}>
-                <Button variant="outlined" onClick={handleBook} disabled={!(selectedButtonId && selectedDate)} className={{ textTransform: "capitalize", }}>Book</Button>
+                <Button variant="outlined" onClick={handleBook} disabled={!(selectedButtonId && selectedDate)} sx={{ textTransform: "capitalize", }}>Book</Button>
                 {/* <Link href="/Pay"> */}
                 <CustomButton variant="contained" onClick={handleNext}>Next</CustomButton>
                 {/* </Link> */}
