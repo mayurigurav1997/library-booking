@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import React from "react"
 import classes from "../../styles/Login/Login.module.scss";
-import { Box, Button, OutlinedInput, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, OutlinedInput, Snackbar, TextField, Typography } from '@mui/material';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux'
 import { setSubmit, setUser } from '../feature/user/userSlice';
@@ -14,6 +14,7 @@ const Login = () => {
     // console.log(userData, "userData")
     const [name, setName] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -26,17 +27,19 @@ const Login = () => {
             return;
         }
         // console.log(allUsers)
+
         dispatch(setUser(name))
         for (user of userData) {
             if (!userData.some((obj) => obj.name == name)) {
                 setAllUsers([...allUsers, { name: name, bookingStatus: [] }])
+                dispatch(setSubmit(allUsers))
             } else {
                 alert("User Already exists!");
             }
         }
-
         setName('');
         // console.log(name)
+
         router.push("/Tables")
     }
     useEffect(() => {
@@ -44,6 +47,9 @@ const Login = () => {
     }, [allUsers])
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="1px solid red">
+            {loading ? <Box sx={{ display: 'flex', position: "absolute" }} border="1px solid blue">
+                <CircularProgress />
+            </Box> : <></>}
             <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }} border="0px solid blue">
                 <Typography variant="h5" sx={{ textAlign: "center", mb: 4 }}>Focus Reading Room</Typography>
                 <Typography variant="h6" sx={{ textAlign: "left" }}>Name</Typography>

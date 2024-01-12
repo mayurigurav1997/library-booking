@@ -11,7 +11,7 @@ const authState = {
             },
             {
                 seatId: "2(Row1)",
-                slot: "12:00AM - 2:00AM",
+                slot: "12:00AM - 2:00PM",
                 date: "1/15/2024",
             },
             {

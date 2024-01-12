@@ -6,9 +6,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 // import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
 
 const Tables = () => {
+    const router = useRouter();
     const [date, setDate] = useState("")
     const [bookedSeats, setBookedSeats] = useState([])
     const [selectedButtonId, setSelectedButtonId] = useState(null)
@@ -21,6 +24,7 @@ const Tables = () => {
     // console.log(name, "name the user")
     const handleDate = (date) => {
         setSelectedButtonId(null)
+        setIndex(0)
         setDate(date)
         let month = date["$M"] + 1
         let day = date["$D"]
@@ -46,7 +50,7 @@ const Tables = () => {
             console.log(`Date  already exists.`);
             var filterBookedSeats = userData?.flatMap(user =>
                 user?.bookingStatus
-                    .filter(booking => "4:00AM - 6:00AM" && booking.date == formattedDate && booking.seatId)
+                    .filter(booking => booking.slot == "4:00AM - 6:00AM" && booking.date == formattedDate && booking.seatId)
                     .map(booking => booking?.seatId)
             );
             setBookedSeats(filterBookedSeats)
@@ -88,30 +92,52 @@ const Tables = () => {
         console.log(filterBookedSeats, "Booked seats are:")
     }
 
-    function handleBooking(i) {
+    function handleSeatSelecting(i) {
         console.log(i, "iyt")
         let totalBooking = userData?.filter(user => user.name === userName).flatMap(user =>
             user?.bookingStatus
                 .filter(booking => booking.slot && booking.date == selectedDate && booking.seatId)
                 .map(booking => booking?.seatId)
         );
-        console.log(totalBooking, "totalBooking")
+        let slotBooking = userData?.filter(user => user.name === userName).flatMap(user =>
+            user?.bookingStatus
+                .filter(booking => booking.slot == selectedSlot && booking.date == selectedDate && booking.seatId)
+                .map(booking => booking?.seatId)
+        );
+        console.log(slotBooking, "slotBooking")
         if (totalBooking.length >= 3) {
-            alert("You have already selected 3 slots for this day, Cant select slot now")
+            alert("You have already selected 3 slots for this day, Can't select slot for this day now")
+            setSelectedButtonId(null)
+        } else if (slotBooking.length > 0) {
+            alert("You have already selected seat for this slot.")
             setSelectedButtonId(null)
         } else {
             setSelectedButtonId(i)
         }
     }
-    const handleNext = () => {
+    const handleBook = () => {
         console.log(selectedButtonId, "setSelectedButtonId(i)")
         const updatedData = userData.map(user =>
             user.name === userName
-                ? { ...user, bookingStatus: [...user.bookingStatus, { date: selectedDate, slot: selectedSlot, seatId: selectedButtonId }] }
+                ? { ...user, bookingStatus: [...user.bookingStatus, { seatId: selectedButtonId, slot: selectedSlot, date: selectedDate }] }
                 : user)
         console.log(updatedData, "updatedData")
         dispatch(setSubmit(updatedData))
+        alert("Your seat is booked")
+        setSelectedButtonId(null)
+        var filterBookedSeats = userData?.flatMap(user =>
+            user?.bookingStatus
+                .filter(booking => booking.slot == selectedSlot && booking.date == selectedDate && booking.seatId)
+                .map(booking => booking?.seatId)
+        );
+        setBookedSeats(filterBookedSeats)
+        setIndex(0)
+        setSelectedButtonId(null)
 
+
+    }
+    const handleNext = () => {
+        router.push("/Pay")
     }
     useEffect(() => {
         console.log(bookedSeats, "indise useeeffect")
@@ -149,7 +175,7 @@ const Tables = () => {
                         variant={selectedButtonId == i ? "contained" : "outlined"}
                         key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
                             console.log(i, 'clicked');
-                            handleBooking(i)
+                            handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
                         border="1px solid blue">{i.charAt()}</Button>)}
                 </Box> :
@@ -161,7 +187,7 @@ const Tables = () => {
                         variant={selectedButtonId == i ? "contained" : "outlined"}
                         key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
                             console.log(i, 'clicked');
-                            handleBooking(i)
+                            handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
                         border="1px solid blue">{i.charAt()}</Button>)}
                 </Box> :
@@ -173,13 +199,18 @@ const Tables = () => {
                         variant={selectedButtonId == i ? "contained" : "outlined"}
                         key={i} sx={{ cursor: "pointer", width: "2%", mx: 1 }} onClick={() => {
                             console.log(i, 'clicked');
-                            handleBooking(i)
+                            handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
                         border="1px solid blue">{i.charAt()}</Button>)}
                 </Box> :
                 <></>}
 
-            <Button variant="outlined" onClick={handleNext} disabled={!selectedButtonId}>Next</Button>
+            <Box sx={{ display: "flex", justifyContent: "space-between", width: "40%" }}>
+                <Button variant="outlined" onClick={handleBook} disabled={!selectedButtonId}>Book</Button>
+                <Link href="/Pay">
+                    <Button variant="outlined" >Next</Button>
+                </Link>
+            </Box>
         </Box>
     )
 }
