@@ -44,8 +44,8 @@ const Pay = () => {
         fontSize: "18px"
     });
     const handleNext = () => {
-        dispatch(setPaymentData([]))
         router.push("/Login")
+        dispatch(setPaymentData([]))
     }
 
 
