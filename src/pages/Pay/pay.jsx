@@ -11,10 +11,6 @@ import moment from 'moment';
 const Pay = () => {
     const router = useRouter();
     const dispatch = useDispatch()
-    const userData = useSelector((state) => state.user.allUsers)
-    const userName = useSelector((state) => state.user.user)
-    const selectedDate = useSelector((state) => state.user.selectedDate)
-    const selectedSlot = useSelector((state) => state.user.selectedSlot)
     const paymentData = useSelector((state) => state.user.paymentData)
     const Price = paymentData.length * 50 || 0;
     console.log(paymentData, "Inside the payment paymentData")
@@ -36,11 +32,16 @@ const Pay = () => {
     });
     const StyledTable = styled(Table)({
         // minWidth: 650,
-        border: '2px solid #d9d9d9', // Add border style to the table
+        border: '2px solid #d9d9d9',
     });
 
     const StyledTableCell = styled(TableCell)({
-        border: '2px solid #d9d9d9', // Add border style to individual cells
+        border: '2px solid #d9d9d9',
+    });
+    const StyledTableHeadingCell = styled(TableCell)({
+        border: '2px solid #d9d9d9',
+        fontWeight: "bold",
+        fontSize: "18px"
     });
     const handleNext = () => {
         dispatch(setPaymentData([]))
@@ -49,22 +50,21 @@ const Pay = () => {
 
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="1px solid red">
-            <Box sx={{ display: "flex", flexDirection: "column", width: "80%", justifyContent: "center", alignItems: "center" }} border="1px solid blue">
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="0px solid red">
+            <Box sx={{ display: "flex", flexDirection: "column", width: "60%", justifyContent: "center", alignItems: "center" }} border="0px solid blue">
                 <Typography3 variant="h6" sx={{ textAlign: "center", mb: 2 }} >Your Selection</Typography3>
                 <TableContainer component={Paper} border="1px solid red" sx={{ width: "50%", mb: 3 }}>
                     <StyledTable aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <StyledTableCell align="left">Day and time</StyledTableCell>
-                                <StyledTableCell align="left">Table</StyledTableCell>
+                                <StyledTableHeadingCell align="left">Day and time</StyledTableHeadingCell>
+                                <StyledTableHeadingCell align="left">Table</StyledTableHeadingCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {paymentData.map((row) => (
                                 <TableRow
                                     key={row.seatId}
-                                // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <StyledTableCell align="left">{moment(row.date).format('Do MMMM YYYY')} {row.slot}</StyledTableCell>
                                     <StyledTableCell align="left">{row.seatId}</StyledTableCell>
@@ -73,7 +73,7 @@ const Pay = () => {
                         </TableBody>
                     </StyledTable>
                 </TableContainer>
-                <Box sx={{ display: "flex", justifyContent: "space-between", width: "60%" }} border="2px solid red">
+                <Box sx={{ display: "flex", justifyContent: "space-between", width: "50%" }} border="0px solid red">
                     <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }} >Total Price</Typography>
                     <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }} >INR {Price}</Typography>
                 </Box>

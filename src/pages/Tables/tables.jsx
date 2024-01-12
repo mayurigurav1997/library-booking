@@ -157,6 +157,8 @@ const Tables = () => {
 
     }
     useEffect(() => {
+        const allUsers = localStorage.getItem("allUsers");
+        console.log(allUsers, "allUsers");
         console.log(bookedSeats, "indise useeeffect")
     }, [bookedSeats])
 

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import React from "react"
-import classes from "../../styles/Login/Login.module.scss";
 import { Box, Button, CircularProgress, OutlinedInput, Snackbar, TextField, Typography } from '@mui/material';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux'
@@ -51,11 +50,12 @@ const Login = () => {
             }
         }
         setName('');
-        // console.log(name)
         router.push("/Tables")
     }
     useEffect(() => {
         dispatch(setSubmit(allUsers))
+        const stringifiedData = JSON.stringify(allUsers);
+        localStorage.setItem("allUsers", stringifiedData);
     }, [allUsers])
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="0px solid red">
