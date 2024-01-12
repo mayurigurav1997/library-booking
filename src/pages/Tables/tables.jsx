@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPaymentData, setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import styled from '@emotion/styled';
 // import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
 
 const Tables = () => {
@@ -19,9 +20,12 @@ const Tables = () => {
     const userName = useSelector((state) => state.user.user)
     const selectedDate = useSelector((state) => state.user.selectedDate)
     const selectedSlot = useSelector((state) => state.user.selectedSlot)
-    // var bookedSeats = []
     let userData = useSelector((state) => state.user.allUsers)
-    // console.log(name, "name the user")
+    const Typography3 = styled(Typography)({
+        fontSize: "24px",
+        fontWeight: "bold",
+        color: "#202124e6",
+    });
     const handleDate = (date) => {
         setSelectedButtonId(null)
         setIndex(0)
@@ -157,7 +161,7 @@ const Tables = () => {
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "98vh" }} border="1px solid red">
             <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }} border="1px solid blue">
-                <Typography variant="h5" sx={{ textAlign: "center", mb: 3 }}>Select your tables</Typography>
+                <Typography3 variant="h5" sx={{ textAlign: "center", mb: 3 }}>Select your tables</Typography3>
                 <Typography variant="h6" sx={{ textAlign: "left", ml: 16 }}>Select date</Typography>
                 <Box sx={{ mb: 5, ml: 16 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>

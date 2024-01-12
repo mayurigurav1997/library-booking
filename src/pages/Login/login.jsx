@@ -18,13 +18,19 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const CustomButton = styled(Button)({
         color: 'white',
-        backgroundColor: '#5b5bd3'
+        backgroundColor: '#5b5bd3',
+        fontSize: "20px"
     });
-    const Typography4 = styled(Typography)`
-    font-size: 24px;
-    font-weight: bold; 
-    color:"#202124ed"
-  `;
+    const Typography3 = styled(Typography)({
+        fontSize: "24px",
+        fontWeight: "bold",
+        color: "#202124e6",
+    });
+    const Typography4 = styled(Typography)({
+        fontSize: "20px",
+        fontWeight: "bold",
+        color: "#202124e6",
+    });;
     const handleNameChange = (event) => {
         setName(event.target.value);
         setError('');
@@ -35,7 +41,6 @@ const Login = () => {
             return;
         }
         // console.log(allUsers)
-
         dispatch(setUser(name))
         for (user of userData) {
             if (!userData.some((obj) => obj.name == name)) {
@@ -47,20 +52,21 @@ const Login = () => {
         }
         setName('');
         // console.log(name)
-
         router.push("/Tables")
     }
     useEffect(() => {
         dispatch(setSubmit(allUsers))
     }, [allUsers])
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="1px solid red">
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="0px solid red">
             {loading ? <Box sx={{ display: 'flex', position: "absolute" }} border="1px solid blue">
                 <CircularProgress />
             </Box> : <></>}
-            <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }} border="0px solid blue">
-                <Typography4 variant="h4" sx={{ textAlign: "center", mb: 4 }}>Focus Reading Room</Typography4>
-                <Typography variant="h6" sx={{ textAlign: "left" }}>Name</Typography>
+            <Box sx={{ display: "flex", flexDirection: "column", width: "26%" }} border="0px solid blue">
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Typography3 variant="h4" sx={{ textAlign: "center", mb: 4 }}>Focus Reading Room</Typography3>
+                </Box>
+                <Typography4 variant="h6" sx={{ textAlign: "left" }}>Name</Typography4>
 
                 <Box sx={{ mb: 5 }}>
                     <OutlinedInput
@@ -74,7 +80,7 @@ const Login = () => {
                     {error && <Typography variant="h6" color="red">Please Enter the Name</Typography>}
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "center", }}>
-                    <CustomButton variant="contained" sx={{ width: "20%", textTransform: "capitalize" }}
+                    <CustomButton variant="contained" sx={{ width: "24%", textTransform: "capitalize" }}
                         onClick={handleLogin} >
                         Login
                     </CustomButton>
