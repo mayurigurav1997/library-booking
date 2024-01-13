@@ -147,8 +147,6 @@ const Tables = () => {
             setSelectedButtonId(null)
         } else {
             setSelectedButtonId(i)
-            console.log("HI")
-            let userObject = copyUserData.find(obj => obj.name == userName)
             const updatedCopyUserData = copyUserData.map(user =>
                 user.name === userName
                     ? {
@@ -262,7 +260,7 @@ const Tables = () => {
             <Box sx={{ display: "flex", justifyContent: "space-between", width: "40%" }}>
                 {/* <Button variant="outlined" disabled={!(selectedButtonId && selectedDate)} sx={{ textTransform: "capitalize", }}>Book</Button> */}
                 {/* <Link href="/Pay"> */}
-                <CustomButton variant="contained" disabled={!(selectedButtonId && selectedDate)} onClick={handleNext}>Next</CustomButton>
+                <CustomButton variant="contained" disabled={!(selectedDate)} onClick={handleNext}>Next</CustomButton>
                 {/* </Link> */}
             </Box>
         </Box>
