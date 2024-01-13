@@ -42,5 +42,4 @@ export const userSlice = createSlice({
 
 
 export const { setSubmit, setUser, setSelectedDate, setSlot, setPaymentData, setCopyAllUserData } = userSlice.actions;
-
 export const userReducer = userSlice.reducer;

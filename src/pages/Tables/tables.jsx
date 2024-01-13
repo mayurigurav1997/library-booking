@@ -4,10 +4,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCopyAllUserData, setPaymentData, setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
+// import { setCopyAllUserData, setPaymentData, setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from '@emotion/styled';
+import { setCopyAllUserData, setPaymentData, setSelectedDate, setSlot } from '@/redux/user/userSlice';
 // import { KeyboardBackspaceOutlinedIcon } from '@mui/icons-material';
 
 const Tables = () => {
@@ -257,11 +258,8 @@ const Tables = () => {
                 </Box> :
                 <></>}
 
-            <Box sx={{ display: "flex", justifyContent: "space-between", width: "40%" }}>
-                {/* <Button variant="outlined" disabled={!(selectedButtonId && selectedDate)} sx={{ textTransform: "capitalize", }}>Book</Button> */}
-                {/* <Link href="/Pay"> */}
+            <Box sx={{ display: "flex", justifyContent: "center", width: "40%" }}>
                 <CustomButton variant="contained" disabled={!(selectedDate)} onClick={handleNext}>Next</CustomButton>
-                {/* </Link> */}
             </Box>
         </Box>
     )

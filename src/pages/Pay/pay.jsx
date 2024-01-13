@@ -3,9 +3,10 @@ import React from "react"
 import { Box, Button, OutlinedInput, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux'
-import { setPaymentData, setSubmit, setUser } from '../feature/user/userSlice';
+// import { setPaymentData, setSubmit, setUser } from '../feature/user/userSlice';
 import { styled } from '@mui/system';
 import moment from 'moment';
+import { setPaymentData, setSubmit } from '@/redux/user/userSlice';
 
 const Pay = () => {
     const router = useRouter();

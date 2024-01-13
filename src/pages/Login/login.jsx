@@ -3,8 +3,9 @@ import React from "react"
 import { Box, Button, CircularProgress, OutlinedInput, Snackbar, TextField, Typography } from '@mui/material';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux'
-import { setSubmit, setUser } from '../feature/user/userSlice';
+
 import { styled } from '@mui/system';
+import { setSubmit, setUser } from '@/redux/user/userSlice';
 
 const Login = () => {
     const router = useRouter();
