@@ -4,7 +4,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPaymentData, setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
+import { setCopyAllUserData, setPaymentData, setSelectedDate, setSlot, setSubmit } from '../feature/user/userSlice';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from '@emotion/styled';
@@ -15,6 +15,7 @@ const Tables = () => {
     const [date, setDate] = useState("")
     const [bookedSeats, setBookedSeats] = useState([])
     const [selectedButtonId, setSelectedButtonId] = useState(null)
+    const [activeButton, setActiveButton] = useState("")
     const Row1 = ["1(Row1)", "2(Row1)", "3(Row1)", "4(Row1)", "5(Row1)", "6(Row1)"]
     const Row2 = ["1(Row2)", "2(Row2)", "3(Row2)", "4(Row2)", "5(Row2)", "6(Row2)"]
     const Row3 = ["1(Row3)", "2(Row3)", "3(Row3)", "4(Row3)", "5(Row3)", "6(Row3)"]
@@ -39,6 +40,11 @@ const Tables = () => {
         fontWeight: 600,
         color: "#202124e6",
     });
+
+    const deepArray = JSON.parse(JSON.stringify(userData));
+    const [copyUserData, setCopyUserData] = useState(deepArray)
+
+    //handle date
     const handleDate = (date) => {
         setSelectedButtonId(null)
         setIndex(0)
@@ -48,19 +54,29 @@ const Tables = () => {
         let year = date["$y"]
         let formattedDate = `${month}/${day}/${year}`
         dispatch(setSelectedDate(formattedDate))
-
         let userObject = userData.find(obj => obj.name == userName)
-        if (!userObject?.bookingStatus.some(obj => obj?.date == formattedDate)) {
-        } else {
-            var filterBookedSeats = userData?.flatMap(user =>
-                user?.bookingStatus
-                    .filter(booking => booking.slot == "4:00AM - 6:00AM" && booking.date == formattedDate && booking.seatId)
-                    .map(booking => booking?.seatId)
-            );
-            setBookedSeats(filterBookedSeats)
-        }
+        console.log(copyUserData, "copyUserData")
+        // if (!userObject?.bookingStatus?.some(obj => obj?.date === formattedDate)) {
+        // } else {
+        //     var filterBookedSeats = userData?.flatMap(user =>
+        //         user?.bookingStatus
+        //             .filter(booking => booking.slot == "4:00AM - 6:00AM" && booking.date == formattedDate && booking.seatId)
+        //             .map(booking => booking?.seatId)
+        //     );
+        //     console.log(filterBookedSeats, "filterBookedSeats")
+        //     setBookedSeats(filterBookedSeats)
+        // }
+        var filterBookedSeats = userData?.flatMap(user =>
+            user?.bookingStatus
+                .filter(booking => booking.slot == "4:00AM - 6:00AM" && booking.date == formattedDate && booking.seatId)
+                .map(booking => booking?.seatId)
+        );
+        console.log(filterBookedSeats, "filterBookedSeats")
+        setBookedSeats(filterBookedSeats)
 
     }
+
+    //handle slot
     const slotsTimings = ["4:00AM - 6:00AM", "6:00AM - 8:00AM", "8:00AM - 10:00AM", "10:00AM - 12:00AM", "12:00AM - 2:00PM", "2:00PM - 4:00PM", "4:00PM - 6:00PM", "6:00PM - 8:00PM", "8:00PM - 10:00PM"];
     const [index, setIndex] = useState(0)
     const handleSlotBack = () => {
@@ -73,7 +89,15 @@ const Tables = () => {
                 .map(booking => booking?.seatId)
         );
         setBookedSeats(filterBookedSeats)
-
+        var greenButton = copyUserData?.flatMap(user =>
+            user?.bookingStatus
+                .filter(booking =>
+                    booking.slot == slotsTimings[index - 1] && booking.date == selectedDate && booking.seatSelected)
+                .map(booking =>
+                    booking?.seatSelected)
+        );
+        console.log(greenButton, "greenButton")
+        setActiveButton(greenButton.length > 0 ? greenButton[0] : "")
     }
     const handleSlotNext = () => {
         setSelectedButtonId(null)
@@ -81,23 +105,40 @@ const Tables = () => {
         dispatch(setSlot(slotsTimings[index + 1]))
         var filterBookedSeats = userData?.flatMap(user =>
             user?.bookingStatus
-                .filter(booking => booking.slot == slotsTimings[index + 1] && booking.date == selectedDate && booking.seatId)
+                .filter(booking => booking.slot == slotsTimings[index + 1] &&
+                    booking.date == selectedDate &&
+                    booking.seatId)
                 .map(booking => booking?.seatId)
         );
+        console.log(filterBookedSeats, "filterBookedSeats")
         setBookedSeats(filterBookedSeats)
+        // setActiveButton("")
+        console.log(copyUserData, "Inside the green")
+        var greenButton = copyUserData?.flatMap(user =>
+            user?.bookingStatus
+                .filter(booking =>
+                    booking.slot == slotsTimings[index + 1] && booking.date == selectedDate && booking.seatSelected)
+                .map(booking =>
+                    booking?.seatSelected)
+        );
+        console.log(greenButton, "greenButton")
+        setActiveButton(greenButton.length > 0 ? greenButton[0] : "")
     }
 
+    //handle Seating
     function handleSeatSelecting(i) {
-        let totalBooking = userData?.filter(user => user.name === userName).flatMap(user =>
+        let totalBooking = copyUserData?.filter(user => user.name === userName).flatMap(user =>
             user?.bookingStatus
-                .filter(booking => booking.slot && booking.date == selectedDate && booking.seatId)
-                .map(booking => booking?.seatId)
+                .filter(booking => booking.slot && booking.date == selectedDate && (booking.seatId || booking.seatSelected))
+                .map(booking => booking.seatSelected)
         );
         let slotBooking = userData?.filter(user => user.name === userName).flatMap(user =>
             user?.bookingStatus
-                .filter(booking => booking.slot == selectedSlot && booking.date == selectedDate && booking.seatId)
-                .map(booking => booking?.seatId)
+                .filter(booking => booking.slot == selectedSlot && booking.date == selectedDate)
+                .map(booking => booking?.seatSelected)
         );
+        console.log(copyUserData, "copyUserData")
+        console.log(totalBooking, "totalBooking")
         if (totalBooking.length >= 3) {
             alert("You have already selected 3 slots for this day, Can't select slot for this day now")
             setSelectedButtonId(null)
@@ -106,43 +147,58 @@ const Tables = () => {
             setSelectedButtonId(null)
         } else {
             setSelectedButtonId(i)
+            console.log("HI")
+            let userObject = copyUserData.find(obj => obj.name == userName)
+            const updatedCopyUserData = copyUserData.map(user =>
+                user.name === userName
+                    ? {
+                        ...user,
+                        bookingStatus: user.bookingStatus.length > 0
+                            ? user.bookingStatus.some(book => book.date === selectedDate && book.slot === selectedSlot && book.seatSelected)
+                                ? user.bookingStatus.map(book =>
+                                    book.date === selectedDate && book.slot === selectedSlot
+                                        ? { ...book, seatSelected: i }
+                                        : book
+                                )
+                                : [...user.bookingStatus, { date: selectedDate, slot: selectedSlot, seatSelected: i }]
+                            : [{ date: selectedDate, slot: selectedSlot, seatSelected: i }]
+                    }
+                    : user
+            );
+            setCopyUserData(updatedCopyUserData)
+            console.log(updatedCopyUserData, "updatedCopyUserData")
+            setActiveButton("")
         }
     }
-    const handleBook = () => {
-        const updatedData = userData.map(user =>
-            user.name === userName
-                ? { ...user, bookingStatus: [...user.bookingStatus, { seatId: selectedButtonId, slot: selectedSlot, date: selectedDate }] }
-                : user)
-        dispatch(setSubmit(updatedData))
-        alert("Your seat is booked")
-        setSelectedButtonId(null)
-        var filterBookedSeats = userData?.flatMap(user =>
-            user?.bookingStatus
-                .filter(booking => booking.slot == selectedSlot && booking.date == selectedDate && booking.seatId)
-                .map(booking => booking?.seatId)
-        );
-        setBookedSeats(filterBookedSeats)
-        setIndex(0)
-        setSelectedButtonId(null)
 
-
-    }
     const handleNext = () => {
-        let paymentData = userData?.filter(user => user.name === userName).flatMap(user =>
+        console.log(copyUserData, "copyUserData in handleNext")
+        let paymentData = copyUserData?.filter(user => user.name === userName).flatMap(user =>
             user?.bookingStatus
-                .filter(booking => booking.slot && booking.date && booking.seatId)
+                .filter(booking => booking.slot && booking.date && booking.seatSelected)
                 .map(booking => booking)
         );
+        console.log(paymentData, "paymentData")
 
         dispatch(setPaymentData(paymentData))
         dispatch(setSelectedDate(""))
         dispatch(setSlot("4:00AM - 6:00AM"))
+        dispatch(setCopyAllUserData(copyUserData))
         router.push("/Pay")
 
     }
     useEffect(() => {
         const allUsers = localStorage.getItem("allUsers");
+        console.log(bookedSeats, "bookedSeats")
     }, [bookedSeats])
+    useEffect(() => {
+        console.log(copyUserData, "copyUserData")
+
+    }, [copyUserData])
+    useEffect(() => {
+        console.log(copyUserData, "copyUserData")
+
+    }, [setActiveButton])
 
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "98vh" }} border="1px solid red">
@@ -172,7 +228,7 @@ const Tables = () => {
                 <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }} border="0px solid red">
                     <Typography variant="h6" >Row1</Typography>
                     {Row1.map((i) => <Button
-                        variant={selectedButtonId == i ? "contained" : "outlined"}
+                        variant={selectedButtonId == i || activeButton == i ? "contained" : "outlined"}
                         key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }} onClick={() => {
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
@@ -204,7 +260,7 @@ const Tables = () => {
                 <></>}
 
             <Box sx={{ display: "flex", justifyContent: "space-between", width: "40%" }}>
-                <Button variant="outlined" onClick={handleBook} disabled={!(selectedButtonId && selectedDate)} sx={{ textTransform: "capitalize", }}>Book</Button>
+                {/* <Button variant="outlined" disabled={!(selectedButtonId && selectedDate)} sx={{ textTransform: "capitalize", }}>Book</Button> */}
                 {/* <Link href="/Pay"> */}
                 <CustomButton variant="contained" onClick={handleNext}>Next</CustomButton>
                 {/* </Link> */}

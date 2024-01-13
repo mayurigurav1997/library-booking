@@ -11,6 +11,7 @@ const Pay = () => {
     const router = useRouter();
     const dispatch = useDispatch()
     const paymentData = useSelector((state) => state.user.paymentData)
+    const copyUserData = useSelector((state) => state.user.copyUserData)
     const Price = paymentData.length * 50 || 0;
     const CustomButton = styled(Button)({
         color: 'white',
@@ -44,8 +45,15 @@ const Pay = () => {
     const handleNext = () => {
         router.push("/Login")
         dispatch(setPaymentData([]))
+        console.log(copyUserData, "copyUserData inside the payment")
+        const filteredData = copyUserData.map(user => ({
+            ...user,
+            bookingStatus: user.bookingStatus.map(book => ({ ...book, seatId: book.seatSelected ? book.seatSelected : book.seatId, seatSelected: "" }))
+        }));
+        console.log(filteredData, "filteredData")
+        alert(`${filteredData.length} seats are booked`)
+        dispatch(setSubmit(filteredData))
     }
-
 
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "98vh" }} border="0px solid red">
@@ -62,10 +70,10 @@ const Pay = () => {
                         <TableBody>
                             {paymentData.map((row) => (
                                 <TableRow
-                                    key={row.seatId}
+                                    key={row.seatSelected}
                                 >
                                     <StyledTableCell align="left">{moment(row.date).format('Do MMMM YYYY')} {row.slot}</StyledTableCell>
-                                    <StyledTableCell align="left">{row.seatId}</StyledTableCell>
+                                    <StyledTableCell align="left">{row.seatSelected}</StyledTableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

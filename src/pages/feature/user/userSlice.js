@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const authState = {
     allUsers: [],
+    setCopyUserData: [],
     user: "",
     selectedDate: "",
     selectedSlot: "4:00AM - 6:00AM",
@@ -31,11 +32,15 @@ export const userSlice = createSlice({
         setPaymentData: (state, { payload }) => ({
             ...state,
             paymentData: payload,
+        }),
+        setCopyAllUserData: (state, { payload }) => ({
+            ...state,
+            copyUserData: payload,
         })
     },
 });
 
 
-export const { setSubmit, setUser, setSelectedDate, setSlot, setPaymentData } = userSlice.actions;
+export const { setSubmit, setUser, setSelectedDate, setSlot, setPaymentData, setCopyAllUserData } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
