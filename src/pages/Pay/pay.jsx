@@ -79,7 +79,7 @@ const Pay = () => {
                         </TableBody>
                     </StyledTable>
                 </TableContainer>
-                <Box sx={{ display: "flex", justifyContent: "space-between", width: "50%" }} border="0px solid red">
+                <Box sx={{ display: "flex", justifyContent: "center", width: "50%" }} border="0px solid red">
                     <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }} >Total Price</Typography>
                     <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }} >INR {Price}</Typography>
                 </Box>

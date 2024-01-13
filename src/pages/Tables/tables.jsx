@@ -229,7 +229,7 @@ const Tables = () => {
                     <Typography variant="h6" >Row1</Typography>
                     {Row1.map((i) => <Button
                         variant={selectedButtonId == i || activeButton == i ? "contained" : "outlined"}
-                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }} onClick={() => {
+                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px", border: "2px solid #5b5bd3", }} onClick={() => {
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
                         border="0px solid blue">{i.charAt()}</Button>)}
@@ -240,7 +240,7 @@ const Tables = () => {
                     <Typography variant="h6" >Row2</Typography>
                     {Row2.map((i) => <Button
                         variant={selectedButtonId == i ? "contained" : "outlined"}
-                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }} onClick={() => {
+                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px", border: "2px solid #5b5bd3", }} onClick={() => {
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
                         border="0px solid blue">{i.charAt()}</Button>)}
@@ -251,7 +251,7 @@ const Tables = () => {
                     <Typography variant="h6" >Row3</Typography>
                     {Row3.map((i) => <Button
                         variant={selectedButtonId == i ? "contained" : "outlined"}
-                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px" }}
+                        key={i} sx={{ cursor: "pointer", width: "1%", mx: 1, borderRadius: "0px", border: "2px solid #5b5bd3", }}
                         onClick={() => {
                             handleSeatSelecting(i)
                         }} disabled={bookedSeats.some(a => a == i)}
@@ -262,7 +262,7 @@ const Tables = () => {
             <Box sx={{ display: "flex", justifyContent: "space-between", width: "40%" }}>
                 {/* <Button variant="outlined" disabled={!(selectedButtonId && selectedDate)} sx={{ textTransform: "capitalize", }}>Book</Button> */}
                 {/* <Link href="/Pay"> */}
-                <CustomButton variant="contained" onClick={handleNext}>Next</CustomButton>
+                <CustomButton variant="contained" disabled={!(selectedButtonId && selectedDate)} onClick={handleNext}>Next</CustomButton>
                 {/* </Link> */}
             </Box>
         </Box>
